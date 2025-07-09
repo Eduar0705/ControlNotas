@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NotesApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Dashboard Navigation -->
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-sticky-note brand-icon"></i>
+                <span class="brand-text">NotesApp</span>
+            </div>
+            <div class="nav-user">
+                <div class="user-info">
+                    <span class="user-name" id="userName">Usuario</span>
+                    <span class="user-email" id="userEmail">usuario@email.com</span>
+                </div>
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-menu" id="userMenu">
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-user-cog"></i>
+                        Configuración
+                    </a>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-question-circle"></i>
+                        Ayuda
+                    </a>
+                    <hr class="menu-divider">
+                    <a href="index.html" class="menu-item logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <h1><i class="fas fa-sticky-note"></i> Mis Notas</h1>
+                    <p class="header-subtitle">Organiza y gestiona todas tus ideas</p>
+                </div>
+                <div class="header-controls">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Buscar notas..." class="search-input">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <button id="addNoteBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nueva Nota
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-list"></i> Todas
+                </button>
+                <button class="filter-btn" data-filter="important">
+                    <i class="fas fa-star"></i> Importantes
+                </button>
+                <button class="filter-btn" data-filter="recent">
+                    <i class="fas fa-clock"></i> Recientes
+                </button>
+            </div>
+
+            <div class="notes-grid" id="notesGrid">
+                <!-- Las notas se generarán dinámicamente aquí -->
+            </div>
+
+            <div class="empty-state" id="emptyState">
+                <i class="fas fa-sticky-note empty-icon"></i>
+                <h3>No hay notas aún</h3>
+                <p>Crea tu primera nota haciendo clic en "Nueva Nota"</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para crear/editar notas -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Nueva Nota</h2>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="noteForm">
+                    <div class="form-group">
+                        <label for="noteTitle">Título</label>
+                        <input type="text" id="noteTitle" placeholder="Título de la nota" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteContent">Contenido</label>
+                        <textarea id="noteContent" placeholder="Escribe tu nota aquí..." rows="8" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="noteImportant">
+                            <span class="checkmark"></span>
+                            Marcar como importante
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para eliminar -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2>Confirmar eliminación</h2>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que quieres eliminar esta nota?</p>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelDelete">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
