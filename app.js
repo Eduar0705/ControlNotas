@@ -23,9 +23,16 @@ app.use(session({
 app.use(express.static('public'));
 app.use(require('./routers/login'));
 app.use(require('./routers/registro'));
+app.use(require('./routers/loginA'));
 
 //RUTAS DE ADMINISTRADOR
 app.use(require('./routers/admin'));
+
+//RUTAS DE PROFESOR
+//app.use(require('./routers/profesor'));
+
+//RUTAS DE ALUMNO
+//app.use(require('./routers/alumno'));
 
 
 app.listen(PORT, function(){

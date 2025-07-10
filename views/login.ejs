@@ -20,12 +20,23 @@
                 <p class="auth-subtitle">Inicia sesión en tu cuenta para continuar</p>
             </div>
 
-            <form class="auth-form" id="loginForm">
+            <% if (typeof mensaje != 'undefined') { %>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Información',
+                        text: '<%= mensaje %>',
+                        confirmButtonText: 'Aceptar'
+                    });
+                </script>
+            <% } %>
+            <form class="auth-form" id="loginForm" action="/LoginA" method="post">
                 <div class="form-group">
                     <label for="cedula" class="form-label">Cedula de Identidad</label>
                     <div class="input-group">
                         <i class="fas fa-id-card input-icon"></i>
-                        <input type="text" id="cedula" name="cedula" class="form-input" placeholder="Ej: 12345678" required>
+                        <input type="text" id="cedula" name="cedula" class="form-input" placeholder="Ej: 12345678">
                     </div>
                 </div>
 
@@ -33,7 +44,7 @@
                     <label for="password" class="form-label">Contraseña</label>
                     <div class="input-group">
                         <i class="fas fa-lock input-icon"></i>
-                        <input type="password" id="password" name="password" class="form-input" placeholder="Tu contraseña" required>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Tu contraseña">
                         <button type="button" class="password-toggle" id="togglePassword">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -45,13 +56,14 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-full btn-large">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <a href="/admin">Iniciar Sesión</a>
+                    <i class="fas fa-sign-in-alt"></i>Iniciar Sesión
                 </button>
             </form>
 
             <div class="auth-footer">
                 <p>¿No tienes una cuenta? <a href="/registro" class="auth-link">Regístrate aquí</a></p>
+                <p>¿Olvidaste tu contraseña? <a href="/recuperar" class="auth-link">Recuperar contraseña</a></p>
+                <p>¿Quieres volver al inicio? <a href="/" class="auth-link">Ir al inicio</a></p>
             </div>
         </div>
 
@@ -76,5 +88,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/login.js"></script>
 </body>
 </html>

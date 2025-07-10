@@ -3,146 +3,375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - NotesApp</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Inicio - Sistema de Gestión Académica</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="img/logoo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/logoo.png" type="image/x-icon">
 </head>
-<body class="dashboard-page">
-    <!-- Dashboard Navigation -->
-    <nav class="dashboard-nav">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <i class="fas fa-sticky-note brand-icon"></i>
-                <span class="brand-text">NotesApp</span>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="/img/logoo.png" alt="Logo" class="logo-img">
+                <span class="logo-text">SGA</span>
             </div>
-            <div class="nav-user">
-                <div class="user-info">
-                    <span class="user-name" id="userName">Usuario</span>
-                    <span class="user-email" id="userEmail">usuario@email.com</span>
-                </div>
-                <div class="user-avatar" id="userAvatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-menu" id="userMenu">
-                    <a href="#" class="menu-item">
-                        <i class="fas fa-user-cog"></i>
-                        Configuración
-                    </a>
-                    <a href="#" class="menu-item">
-                        <i class="fas fa-question-circle"></i>
-                        Ayuda
-                    </a>
-                    <hr class="menu-divider">
-                    <a href="index.html" class="menu-item logout">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Cerrar Sesión
-                    </a>
-                </div>
-            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-    </nav>
 
-    <div class="dashboard-container">
-        <header class="dashboard-header">
-            <div class="header-content">
-                <div class="header-title">
-                    <h1><i class="fas fa-sticky-note"></i> Mis Notas</h1>
-                    <p class="header-subtitle">Organiza y gestiona todas tus ideas</p>
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Inicio</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#students" class="nav-link" data-section="students">
+                        <i class="fas fa-user-graduate"></i>
+                        <span class="nav-text">Estudiantes</span>
+                        <span class="nav-badge"><%= totalEstu %></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#teachers" class="nav-link" data-section="teachers">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span class="nav-text">Profesores</span>
+                        <span class="nav-badge"><%= totalProf %></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#grades" class="nav-link" data-section="grades">
+                        <i class="fas fa-chart-line"></i>
+                        <span class="nav-text">Calificaciones</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#courses" class="nav-link" data-section="courses">
+                        <i class="fas fa-book"></i>
+                        <span class="nav-text">Cursos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#reports" class="nav-link" data-section="reports">
+                        <i class="fas fa-file-alt"></i>
+                        <span class="nav-text">Reportes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle">Inicio</h1>
+            </div>
+            
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar..." id="searchInput">
                 </div>
-                <div class="header-controls">
-                    <div class="search-container">
-                        <input type="text" id="searchInput" placeholder="Buscar notas..." class="search-input">
-                        <i class="fas fa-search search-icon"></i>
+                
+                <div class="header-actions">
+                    <div class="user-menu" id="userMenu">
+                        <button class="user-menu-btn" id="userMenuBtn">
+                            <div class="user-avatar-small">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span class="user-name-header"><%= datos.nombre_apellido || 'Admin' %></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="#profile" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Mi Perfil
+                            </a>
+                            <a href="#settings" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Configuración
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/login" class="dropdown-item logout-btn" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Cerrar Sesión
+                            </a>
+                        </div>
                     </div>
-                    <button id="addNoteBtn" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Nueva Nota
-                    </button>
                 </div>
             </div>
         </header>
 
-        <main class="dashboard-main">
-            <div class="filters">
-                <button class="filter-btn active" data-filter="all">
-                    <i class="fas fa-list"></i> Todas
-                </button>
-                <button class="filter-btn" data-filter="important">
-                    <i class="fas fa-star"></i> Importantes
-                </button>
-                <button class="filter-btn" data-filter="recent">
-                    <i class="fas fa-clock"></i> Recientes
-                </button>
-            </div>
-
-            <div class="notes-grid" id="notesGrid">
-                <!-- Las notas se generarán dinámicamente aquí -->
-            </div>
-
-            <div class="empty-state" id="emptyState">
-                <i class="fas fa-sticky-note empty-icon"></i>
-                <h3>No hay notas aún</h3>
-                <p>Crea tu primera nota haciendo clic en "Nueva Nota"</p>
-            </div>
-        </main>
-    </div>
-
-    <!-- Modal para crear/editar notas -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="modalTitle">Nueva Nota</h2>
-                <button class="close-btn" id="closeModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="noteForm">
-                    <div class="form-group">
-                        <label for="noteTitle">Título</label>
-                        <input type="text" id="noteTitle" placeholder="Título de la nota" required>
+        <div class="content-area">
+            <!-- Dashboard -->
+            <section class="content-section active" id="dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon students">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number"><%= totalEstu %></h3>
+                            <p class="stat-label">Estudiantes</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="noteContent">Contenido</label>
-                        <textarea id="noteContent" placeholder="Escribe tu nota aquí..." rows="8" required></textarea>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon teachers">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number"><%= totalProf %></h3>
+                            <p class="stat-label">Profesores</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="noteImportant">
-                            <span class="checkmark"></span>
-                            Marcar como importante
-                        </label>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon courses">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">32</h3>
+                            <p class="stat-label">Cursos</p>
+                            <span class="stat-change neutral">Sin cambios</span>
+                        </div>
                     </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Guardar
-                        </button>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon grades">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">8.7</h3>
+                            <p class="stat-label">Promedio General</p>
+                            <span class="stat-change positive">+0.3 este mes</span>
+                        </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                </div>
 
-    <!-- Modal de confirmación para eliminar -->
-    <div class="modal-overlay" id="deleteModal">
-        <div class="modal modal-small">
-            <div class="modal-header">
-                <h2>Confirmar eliminación</h2>
-            </div>
-            <div class="modal-body">
-                <p>¿Estás seguro de que quieres eliminar esta nota?</p>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelDelete">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDelete">
-                        <i class="fas fa-trash"></i> Eliminar
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Actividad Reciente</h3>
+                            <button class="card-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>Nuevo estudiante registrado: <strong>María García</strong></p>
+                                        <span class="activity-time">Hace 2 horas</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>Calificaciones actualizadas en <strong>Matemáticas</strong></p>
+                                        <span class="activity-time">Hace 4 horas</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>Recordatorio: Reunión de profesores mañana</p>
+                                        <span class="activity-time">Hace 1 día</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Próximos Eventos</h3>
+                            <button class="card-action">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="event-list">
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">15</span>
+                                        <span class="month">Mar</span>
+                                    </div>
+                                    <div class="event-content">
+                                        <h4>Exámenes Finales</h4>
+                                        <p>Período de evaluaciones finales</p>
+                                    </div>
+                                </div>
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">20</span>
+                                        <span class="month">Mar</span>
+                                    </div>
+                                    <div class="event-content">
+                                        <h4>Reunión de Padres</h4>
+                                        <p>Entrega de calificaciones</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Estudiantes -->
+            <section class="content-section" id="students-section">
+                <div class="section-header">
+                    <h2>Gestión de Estudiantes</h2>
+                    <button class="btn btn-primary" id="addStudentBtn">
+                        <i class="fas fa-plus"></i>
+                        Agregar Estudiante
                     </button>
                 </div>
-            </div>
-        </div>
-    </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="table-filters">
+                            <select class="filter-select" id="gradeFilter" name="gradeFilter">
+                                <option value="">Todos los grados</option>
+                                <% for (let i = 1; i <= 9; i++) { %>
+                                <option value="<%= i %>"><%= i %>° Semestre</option>
+                                <% } %>
+                            </select>
+                            <input type="text" class="filter-input" placeholder="Buscar por carrera..." id="careerFilter" name="careerFilter">
+                            <input type="text" class="filter-input" placeholder="Buscar estudiante..." id="studentSearch" name="studentSearch">
+                        </div>
+                    </div>
+                    <table class="data-table" id="studentsTable">
+                        <thead>
+                            <tr>
+                                <th>Estudiante</th>
+                                <th>Email</th>
+                                <th>Carrera</th>
+                                <th>Semestre</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% estudiantes.forEach(estudiante => { %>
+                                <tr data-info='<%- JSON.stringify(estudiante.iformacion_personal || {}) %>'>
+                                    <td><%= estudiante.nombre_apellido %></td>
+                                    <td><%= estudiante.email %></td>
+                                    <td><%= estudiante.especialidad %></td>
+                                    <td><%= estudiante.grado %>° Semestre</td>
+                                    <td><span class="status-badge <%= estudiante.estado.toLowerCase() %>"><%= estudiante.estado %></span></td>
+                                    <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon view" title="Ver" onclick="verEstudiante('<%= estudiante.id_estudiante %>')">
+                                        <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon edit" title="Editar" onclick="editarEstudiante('<%= estudiante.id_estudiante %>')">
+                                        <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon delete" title="Eliminar" onclick="eliminarEstudiante('<%= estudiante.id_estudiante %>')">
+                                        <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-    <script src="dashboard.js"></script>
+            <!-- Profesores -->
+            <section class="content-section" id="teachers-section">
+                <div class="section-header">
+                    <h2>Gestión de Profesores</h2>
+                    <button class="btn btn-primary" id="addTeacherBtn">
+                        <i class="fas fa-plus"></i>
+                        Agregar Profesor
+                    </button>
+                </div>
+                
+                <div class="teachers-grid">
+                    <% profesores.forEach(profesor => { %>
+                        <div class="teacher-card">
+                        <div class="teacher-avatar">
+                            <%= profesor.nombre_apellido ? profesor.nombre_apellido.charAt(0).toUpperCase() : '?' %>
+                        </div>
+                        <div class="teacher-info">
+                            <h3>Prof. <%= profesor.nombre_apellido %></h3>
+                            <p class="teacher-subject"><%= profesor.materia || 'Asignatura no especificada' %></p>
+                            <p class="teacher-email"><%= profesor.email %></p>
+                        </div>
+                        <div class="teacher-stats">
+                            <div class="stat">
+                                <span class="stat-value"><%= profesor.especialidad || 'Sin especialidad' %></span>
+                                <span class="stat-label">Especialidad</span>
+                            </div>
+                        </div>
+                        <div class="teacher-actions">
+                            <button class="btn btn-outline" onclick="verPerfil('<%= profesor.id %>')">Ver Perfil</button>
+                            <button class="btn-icon" onclick="mostrarOpciones('<%= profesor.id %>')">
+                            <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                        </div>
+                    <% }); %>
+                    <% if (profesores.length === 0) { %>
+                    <div class="no-results">
+                        <p>No hay profesores registrados</p>
+                    </div>
+                    <% } %>
+                </div>
+            </section>
+
+            <!-- Otras secciones -->
+            <section class="content-section" id="grades-section">
+                <h2>Gestión de Calificaciones</h2>
+                <p>Contenido de calificaciones...</p>
+            </section>
+
+            <section class="content-section" id="courses-section">
+                <h2>Gestión de Cursos</h2>
+                <p>Contenido de cursos...</p>
+            </section>
+
+            <section class="content-section" id="reports-section">
+                <h2>Reportes</h2>
+                <p>Contenido de reportes...</p>
+            </section>
+
+            <section class="content-section" id="settings-section">
+                <h2>Configuración</h2>
+                <p>Contenido de configuración...</p>
+            </section>
+        </div>
+    </main>
+
+    <div class="overlay" id="overlay"></div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/admin.js"></script>
 </body>
 </html>
