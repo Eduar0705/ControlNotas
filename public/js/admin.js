@@ -1,5 +1,3 @@
-// admin.js limpio y optimizado con filtrado de estudiantes por carrera y vista detallada
-
 // Variables globales
 let sidebar, sidebarToggle, mobileMenuBtn, userMenuBtn, userDropdown, overlay, pageTitle, searchInput, logoutBtn;
 let currentSection = "dashboard";
@@ -73,11 +71,14 @@ function setupEventListeners() {
 
 function setupNavigation() {
   document.querySelectorAll(".nav-link").forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const section = link.dataset.section;
-      if (section) navigateToSection(section);
-    });
+    const section = link.dataset.section;
+    if (section && section !== "#") {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        navigateToSection(section);
+      });
+    }
+    // Si no tiene data-section, deja que se maneje como redirección normal
   });
 }
 
@@ -89,15 +90,12 @@ function navigateToSection(section) {
   document.getElementById(`${section}-section`)?.classList.add("active");
 
   const titles = {
-    dashboard: "Dashboard",
     students: "Gestión de Estudiantes",
     teachers: "Gestión de Profesores",
-    grades: "Gestión de Calificaciones",
     courses: "Gestión de Cursos",
     reports: "Reportes",
-    settings: "Configuración",
   };
-  pageTitle.textContent = titles[section] || "Dashboard";
+  pageTitle.textContent = titles[section] || "Panel";
   currentSection = section;
   if (isMobile) closeMobileSidebar();
 }
@@ -188,11 +186,10 @@ function setupStudentFilters() {
     const career = careerFilter?.value.toLowerCase() || "";
 
     rows.forEach(row => {
-      // Corregido: índices de columnas correctos
-      const name = row.cells[0].textContent.toLowerCase(); // Columna 0: Estudiante
-      const email = row.cells[1].textContent.toLowerCase(); // Columna 1: Email
-      const studentCareer = row.cells[2].textContent.toLowerCase(); // Columna 2: Carrera
-      const studentGrade = row.cells[3].textContent; // Columna 3: Semestre
+      const name = row.cells[0].textContent.toLowerCase(); 
+      const email = row.cells[1].textContent.toLowerCase();
+      const studentCareer = row.cells[2].textContent.toLowerCase();
+      const studentGrade = row.cells[3].textContent;
 
       const matchesSearch = name.includes(search) || email.includes(search);
       const matchesGrade = !grade || studentGrade.includes(grade);
@@ -209,13 +206,11 @@ function setupStudentFilters() {
 
 // Ver información del estudiante
 function verEstudiante(id) {
-  // Buscar la fila por el ID del estudiante
   const row = [...document.querySelectorAll("#studentsTable tbody tr")].find(r => {
-    // Buscar el botón de ver que tenga el ID correspondiente
     const viewBtn = r.querySelector('button[onclick*="verEstudiante"]');
     return viewBtn && viewBtn.getAttribute('onclick').includes(id);
   });
-  
+
   if (!row) {
     Swal.fire({
       title: "Error",
@@ -225,53 +220,44 @@ function verEstudiante(id) {
     return;
   }
 
-  // Obtener datos de la fila (índices correctos)
-  const nombre = row.cells[0].textContent.trim(); // Columna 0: Estudiante
-  const email = row.cells[1].textContent.trim(); // Columna 1: Email
-  const carrera = row.cells[2].textContent.trim(); // Columna 2: Carrera
-  const semestre = row.cells[3].textContent.trim(); // Columna 3: Semestre
-  const estado = row.cells[4].textContent.trim(); // Columna 4: Estado
+  const nombre = row.cells[0].textContent.trim();
+  const email = row.cells[1].textContent.trim();
+  const especialidad = row.cells[2].textContent.trim();
+  const semestre = row.cells[3].textContent.trim();
+  const estado = row.cells[4].textContent.trim();
+  
+  // Obtener los datos del atributo data-info (ahora está en el tr, no en una celda)
+  const infoPersonal = JSON.parse(row.getAttribute('data-info') || '{}');
 
-  // Obtener información personal del atributo data-info
-  const jsonText = row.dataset.info || '{}';
-  let infoPersonal;
-  try {
-    infoPersonal = JSON.parse(jsonText);
-  } catch (error) {
-    console.error('Error parseando JSON:', error);
-    infoPersonal = {};
-  }
-
-  // Extraer datos con valores por defecto
+  // Extraer la estructura de datos que esperas
   const direccion = infoPersonal.direccion || {};
   const nacimiento = infoPersonal.nacimiento || {};
   const bachillerato = infoPersonal.bachillerato || {};
 
-  // Construir HTML para mostrar
   const infoHTML = `
     <div style="text-align: left; max-width: 500px; margin: 0 auto;">
       <h4 style="color: #333; margin-bottom: 15px; border-bottom: 2px solid #007bff; padding-bottom: 5px;">
         📋 Información Básica
       </h4>
       <p><strong>📧 Email:</strong> ${email}</p>
-      <p><strong>🎓 Carrera:</strong> ${carrera}</p>
+      <p><strong>🎓 Especialidad:</strong> ${especialidad}</p>
       <p><strong>📚 Semestre:</strong> ${semestre}</p>
       <p><strong>📊 Estado:</strong> ${estado}</p>
-      
+
       <h4 style="color: #333; margin: 20px 0 15px 0; border-bottom: 2px solid #28a745; padding-bottom: 5px;">
         🏠 Dirección
       </h4>
       <p><strong>Estado:</strong> ${direccion.estado || 'No especificado'}</p>
       <p><strong>Ciudad:</strong> ${direccion.ciudad || 'No especificado'}</p>
       <p><strong>Dirección:</strong> ${direccion.direccion_exacta || 'No especificado'}</p>
-      
+
       <h4 style="color: #333; margin: 20px 0 15px 0; border-bottom: 2px solid #ffc107; padding-bottom: 5px;">
         🎂 Información de Nacimiento
       </h4>
       <p><strong>Fecha:</strong> ${nacimiento.fecha || 'No especificado'}</p>
       <p><strong>Edad:</strong> ${nacimiento.edad || 'No especificado'} años</p>
       <p><strong>Lugar:</strong> ${nacimiento.lugar || 'No especificado'}</p>
-      
+
       <h4 style="color: #333; margin: 20px 0 15px 0; border-bottom: 2px solid #dc3545; padding-bottom: 5px;">
         🎓 Bachillerato
       </h4>
@@ -292,7 +278,6 @@ function verEstudiante(id) {
   });
 }
 
-// Función para editar estudiante
 function editarEstudiante(id) {
   Swal.fire({
     title: "Editar Estudiante",
@@ -302,7 +287,6 @@ function editarEstudiante(id) {
   });
 }
 
-// Función para eliminar estudiante
 function eliminarEstudiante(id) {
   Swal.fire({
     title: "¿Eliminar estudiante?",

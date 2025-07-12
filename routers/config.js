@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/conexion');
 
-router.get("/admin", function(req, res) {
-    const conexion = new db();
+router.get("/admin/config", function(req, res) {
+    const cone = new db();
     if (!req.session?.login) {
         return res.render("login", { mensaje: "Por favor, inicia sesión." });
     }
@@ -12,9 +12,8 @@ router.get("/admin", function(req, res) {
     const queryProfesores = "SELECT * FROM inf_admins WHERE id_cargo = 2";
     const queryEstudiantes = "SELECT * FROM inf_estudiantes";
     const queryCursos = "SELECT * FROM cursos";
-    
-    // Ejecutar ambas consultas en paralelo
-    conexion.conexion.query(queryProfesores, function(errProfesores, profesores) {
+
+    cone.conexion.query(queryProfesores, function(errProfesores, profesores) {
         if (errProfesores) {
             console.error("Error al consultar profesores:", errProfesores);
             return res.render("admin", { 
@@ -23,7 +22,7 @@ router.get("/admin", function(req, res) {
             });
         }
 
-        conexion.conexion.query(queryEstudiantes, function(errEstudiantes, estudiantes) {
+        cone.conexion.query(queryEstudiantes, function(errEstudiantes, estudiantes) {
             if (errEstudiantes) {
                 console.error("Error al consultar estudiantes:", errEstudiantes);
                 return res.render("admin", { 
@@ -31,7 +30,7 @@ router.get("/admin", function(req, res) {
                     error: "Error al cargar los datos de estudiantes"
                 });
             }
-            conexion.conexion.query(queryCursos, (errCursos, cursos)=>{
+            cone.conexion.query(queryCursos, (errCursos, cursos)=>{
                 if (errCursos) {
                     console.error("Error al consultar cursos:", errCursos);
                     return res.render("admin", { 
@@ -46,7 +45,7 @@ router.get("/admin", function(req, res) {
                 const totalCursos = cursos.length;
             
                 // Renderizar vista con todos los datos
-                res.render("admin", { 
+                res.render("admin/config", { 
                     datos: req.session,
                     profesores: profesores,
                     estudiantes: estudiantes,

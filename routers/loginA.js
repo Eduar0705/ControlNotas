@@ -63,7 +63,7 @@ router.post('/LoginA', (req, res) => {
                         return res.render('login', { mensaje });
                 }
             });
-
+            con.conexion.end();
         });
     } catch (error) {
         console.error('Error general en el login:', error);

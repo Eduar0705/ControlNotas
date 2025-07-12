@@ -3,9 +3,9 @@ const mysql = require('mysql');
 class Conexion {
     constructor() {
         this.conexion = mysql.createConnection({
-            host: "mysql-convivir.alwaysdata.net",
-            database: "convivir_notas",
-            user: "convivir",
+            host: "mysql-sistems.alwaysdata.net",
+            database: "sistems_bd",
+            user: "sistems",
             password: "31466704"
         });
 

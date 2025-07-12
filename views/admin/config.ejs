@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Sistema de Gestión Académica</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/img/logoo.png" type="image/x-icon">
+</head>
+<body>
+        <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="/img/logoo.png" alt="Logo" class="logo-img">
+                <span class="logo-text">SGA</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/admin" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/perfil" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span class="nav-text">Mi Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/config" class="nav-link active">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle"><i class="fas fa-cog"></i> Configuración</h1>
+            </div>
+            
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar..." id="searchInput">
+                </div>
+                
+                <div class="header-actions">
+                    <div class="user-menu" id="userMenu">
+                        <button class="user-menu-btn" id="userMenuBtn">
+                            <div class="user-avatar-small">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span class="user-name-header"><%= datos.nombre_apellido || 'Admin' %></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="/admin/perfil" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Mi Perfil
+                            </a>
+                            <a href="/admin/config" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Configuración
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/login" class="dropdown-item logout-btn" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

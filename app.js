@@ -14,8 +14,10 @@ app.use(session({
     secret: 'mi-clave-secreta',
     resave: false,
     saveUninitialized: false,
+    rolling: true,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24 // 1 día
+        maxAge: 15 * 60 * 1000, // 15 minutos
+        httpOnly: true
     }
 }));
 
@@ -24,6 +26,8 @@ app.use(express.static('public'));
 app.use(require('./routers/login'));
 app.use(require('./routers/registro'));
 app.use(require('./routers/loginA'));
+app.use(require('./routers/config'));
+app.use(require('./routers/perfil'));
 
 //RUTAS DE ADMINISTRADOR
 app.use(require('./routers/admin'));
