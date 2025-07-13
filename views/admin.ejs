@@ -72,11 +72,6 @@
             </div>
             
             <div class="header-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Buscar..." id="searchInput">
-                </div>
-                
                 <div class="header-actions">
                     <div class="user-menu" id="userMenu">
                         <button class="user-menu-btn" id="userMenuBtn">
@@ -95,6 +90,10 @@
                             <a href="admin/config" class="dropdown-item">
                                 <i class="fas fa-cog"></i>
                                 Configuración
+                            </a>
+                            <a href="admin/soli" class="dropdown-item">
+                                <i class="fas fa-user-friends"></i>
+                                Solicitudes
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="/login" class="dropdown-item logout-btn" id="logoutBtn">
@@ -255,7 +254,6 @@
                         </thead>
                         <tbody>
                             <% estudiantes.forEach(estudiante => { 
-                                // Asegurarse de que iformacion_personal sea un objeto válido
                                 const infoPersonal = typeof estudiante.iformacion_personal === 'string' 
                                     ? JSON.parse(estudiante.iformacion_personal) 
                                     : estudiante.iformacion_personal || {};

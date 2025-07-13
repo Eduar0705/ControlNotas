@@ -41,6 +41,13 @@
                         <span class="nav-text">Configuración</span>
                     </a>
                 </li>
+                <li>
+                    <a href="/admin/soli" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        <span class="nav-text">Solicitudes</span>
+                        <span class="nav-badge"><%= totalSoli %></span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </aside>
@@ -55,11 +62,6 @@
             </div>
             
             <div class="header-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Buscar..." id="searchInput">
-                </div>
-                
                 <div class="header-actions">
                     <div class="user-menu" id="userMenu">
                         <button class="user-menu-btn" id="userMenuBtn">

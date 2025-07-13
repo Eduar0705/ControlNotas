@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitudes - Sistema de Gestión Académica</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/soli.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/img/logoo.png" type="image/x-icon">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="/img/logoo.png" alt="Logo" class="logo-img">
+                <span class="logo-text">SGA</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/admin" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/perfil" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span class="nav-text">Mi Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/config" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Configuración</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/soli" class="nav-link active">
+                        <i class="fas fa-user-friends"></i>
+                        <span class="nav-text">Solicitudes</span>
+                        <span class="nav-badge"><%= totalSolicitudes %></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle"><i class="fas fa-user-friends"></i>Solicitudes</h1>
+            </div>
+            
+            <div class="header-right">
+                <div class="header-actions">
+                    <div class="user-menu" id="userMenu">
+                        <button class="user-menu-btn" id="userMenuBtn">
+                            <div class="user-avatar-small">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span class="user-name-header"><%= datos.nombre_apellido || 'Admin' %></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="/admin/perfil" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Mi Perfil
+                            </a>
+                            <a href="/admin/config" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Configuración
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/login" class="dropdown-item logout-btn" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Contenido -->
+        <section class="content">
+            <div class="container">
+                <div class="filters-section">
+                <div class="search-container">
+                    <div class="search-group">
+                    <label for="searchName">Buscar por Nombre/Cédula:</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchName" placeholder="Ingrese nombre o cédula...">
+                    </div>
+                    </div>
+                    
+                    <div class="search-group">
+                    <label for="filterCarrera">Filtrar por Carrera:</label>
+                    <select id="filterCarrera">
+                        <option value="">Todas las carreras</option>
+                        <option value="">Informatica</option>
+                        <option value="">Educacion</option>
+                        <option value="">Medicina</option>
+                        <option value="">Electrica</option>
+                        <option value="">Mecanica</option>
+                    </select>
+                    </div>
+                </div>
+
+                <div class="actions-bar">
+                    <p id="recordCount" class="record-count">Mostrando 0 de 0 solicitudes</p>
+                    <button class="btn btn-refresh">
+                    <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                    <button class="btn btn-clear">
+                    <i class="fas fa-times"></i> Limpiar Filtros
+                    </button>
+                </div>
+                </div>
+
+                <div class="content">
+                <div class="loading-container" id="loadingContainer">
+                    <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Cargando solicitudes...</p>
+                    </div>
+                </div>
+
+                <div class="table-container" id="tableContainer" style="display: none;">
+                    <table id="solicitudesTable">
+                    <thead>
+                        <tr>
+                        <th>Cédula</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Carrera</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <% soli.forEach(estudiante => {
+                        let infoPersonal = {};
+                        try {
+                            infoPersonal = typeof estudiante.iformacion_personal === 'string'
+                            ? JSON.parse(estudiante.iformacion_personal)
+                            : estudiante.iformacion_personal || {};
+                        } catch (e) {
+                            infoPersonal = {};
+                        }
+
+                        const idEstudiante = estudiante.id_estudiante || '';
+                        const cedula = estudiante.cedula || 'No especificado';
+                        const nombre = estudiante.nombre_apellido || 'Nombre no disponible';
+                        const email = estudiante.email || 'Sin email';
+                        const especialidad = estudiante.especialidad || 'No especificado';
+                        const grado = estudiante.grado ? `${estudiante.grado}° Semestre` : 'Semestre no disponible';
+                        const estado = estudiante.estado || 'PENDIENTE';
+                        %>
+                        <tr data-id="<%- idEstudiante %>" data-info='<%- JSON.stringify(infoPersonal) %>'>
+                            <td><%- cedula %></td>
+                            <td><%- nombre %></td>
+                            <td><%- email %></td>
+                            <td><%- especialidad %></td>
+                            <td><%- grado %></td>
+                            <td>
+                                <span class="status-badge <%- estado.toLowerCase() %>">
+                                    <%- estado %>
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-icon view" title="Ver detalles" 
+                                        onclick="verEstudiante('<%- idEstudiante %>')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn-icon edit" title="Aprobar solicitud" 
+                                        onclick="aprobarEstudiante('<%- idEstudiante %>')">
+                                        <i class="fas fa-check"></i>
+                                    </button>]
+                                    <button class="btn-icon delete" title="Eliminar registro" 
+                                        onclick="eliminarEstudiante('<%- idEstudiante %>', '<%- nombre %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/solicitud.js"></script>
+</body>
+</html>

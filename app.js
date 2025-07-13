@@ -21,16 +21,17 @@ app.use(session({
     }
 }));
 
-//RUTAS ESTATICAS
+//RUTAS ESTATICAS Y PRINCIPALES
 app.use(express.static('public'));
 app.use(require('./routers/login'));
 app.use(require('./routers/registro'));
 app.use(require('./routers/loginA'));
-app.use(require('./routers/config'));
-app.use(require('./routers/perfil'));
 
 //RUTAS DE ADMINISTRADOR
 app.use(require('./routers/admin'));
+app.use(require('./routers/config'));
+app.use(require('./routers/perfil'));
+app.use(require('./routers/soli'));
 
 //RUTAS DE PROFESOR
 //app.use(require('./routers/profesor'));
